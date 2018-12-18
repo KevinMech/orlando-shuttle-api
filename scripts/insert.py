@@ -23,11 +23,17 @@ def connect():
         print(error)
         sys.exit()
 
+def parse_file(file):
+    print('parsing ' + file)
+    with open(json_directory + file) as file:
+        geojson = json.load(file)
+    return geojson
+
 def read_files():
     print('Reading files...')
     for filename in os.listdir(json_directory):
         if filename.endswith('.json'):
-            # geojson = parse_file(filename)
+            geojson = parse_file(filename)
             
 
 if __name__ == "__main__":
