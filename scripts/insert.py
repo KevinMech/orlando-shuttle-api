@@ -21,5 +21,9 @@ def connect():
         print(error)
         sys.exit()
 
+def poppulate(conn):
+    
+
 if __name__ == "__main__":
     conn = connect()
+    poppulate(conn)
