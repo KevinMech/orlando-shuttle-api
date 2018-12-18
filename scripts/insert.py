@@ -1,7 +1,9 @@
 import sys
 import os
+import json
 import psycopg2
 
+json_directory = '../geojson/'
     
 def connect():
     try:
@@ -21,9 +23,13 @@ def connect():
         print(error)
         sys.exit()
 
-def poppulate(conn):
-    
+def read_files():
+    print('Reading files...')
+    for filename in os.listdir(json_directory):
+        if filename.endswith('.json'):
+            # geojson = parse_file(filename)
+            
 
 if __name__ == "__main__":
     conn = connect()
-    poppulate(conn)
+    read_files()
