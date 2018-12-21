@@ -28,13 +28,14 @@ def db_connect():
 
 def parse_file(file, conn):
     id = None
-
     print('parsing ' + file)
 
     with open(JSON_DIRECTORY + file) as file:
         geojson = json.load(file)
+
     # remove top level object
     geojson = geojson['features']
+
     # parse JSON for name
     for features in geojson:
         if features['type'] == 'Feature':
@@ -43,18 +44,34 @@ def parse_file(file, conn):
             print(id)
             break
 
+    # parse JSON for stops
+    if id is not None:
+        for features in geojson:
+            if features['geometry']['type'] == 'MultiPoint':
+                for coords in features['geometry']['coordinates']:
+                    latitude = coords[0]
+                    db_insert_stop(id, coords[1], coords[0], conn)
     # return geojson
 
 
 def db_insert_name(name, conn):
-    print('Inserting ' + name + ' name into database')
+    print('Inserting ' + name + ' into database')
     cur = conn.cursor()
     try:
         cur.execute("INSERT INTO buses (name) VALUES ('{0}');".format(name))
         cur.execute("SELECT id FROM buses WHERE name ='{0}';".format(name))
         return cur.fetchone()
     except (Exception, psycopg2.DatabaseError) as err:
-        print('Failed to write' + name + 'to database!')
+        print('Failed to write ' + name + 's name to database!')
+        print(err)
+
+
+def db_insert_stop(id, longitude, latitude, conn):
+    cur = conn.cursor()
+    try:
+        cur.execute("INSERT INTO stops (id, longitude, latitude) VALUES ('{0}', '{1}', '{2}');".format(id[0], longitude, latitude))
+    except (Exception, psycopg2.DatabaseError) as err:
+        print('Failed to write stop to database!')
         print(err)
 
 
