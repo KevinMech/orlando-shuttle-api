@@ -26,9 +26,9 @@ def db_connect():
         sys.exit()
 
 
-def parse_file(file, conn):
+def parse_file(file, cur):
     id = None
-    print('parsing ' + file)
+    print('parsing ' + file + '...')
 
     with open(JSON_DIRECTORY + file) as file:
         geojson = json.load(file)
@@ -39,9 +39,7 @@ def parse_file(file, conn):
     # parse JSON for name
     for features in geojson:
         if features['type'] == 'Feature':
-            print(features['properties']['name'])
-            id = db_insert_name(features['properties']['name'], conn)
-            print(id)
+            id = db_insert_name(features['properties']['name'], cur)
             break
 
     # parse JSON for stops
@@ -49,17 +47,15 @@ def parse_file(file, conn):
         for features in geojson:
             if features['geometry']['type'] == 'MultiPoint':
                 for coords in features['geometry']['coordinates']:
-                    db_insert_stop_route(id, 'stops', coords[1], coords[0], conn)
+                    db_insert_stop_route(id, 'stops', coords[1], coords[0], cur)
             if features['geometry']['type'] == 'LineString':
                 for coords in features['geometry']['coordinates']:
-                    db_insert_stop_route(id, 'routes', coords[1], coords[0], conn)
+                    db_insert_stop_route(id, 'routes', coords[1], coords[0], cur)
+        print('Successfully added to database!')
+    
 
-    conn.commit()
-
-
-def db_insert_name(name, conn):
-    print('Inserting ' + name + ' into database')
-    cur = conn.cursor()
+def db_insert_name(name, cur):
+    print('Inserting ' + name + ' into database...')
     try:
         cur.execute("INSERT INTO buses (name) VALUES ('{0}');".format(name))
         cur.execute("SELECT id FROM buses WHERE name ='{0}';".format(name))
@@ -69,22 +65,27 @@ def db_insert_name(name, conn):
         print(err)
 
 
-def db_insert_stop_route(id, table, longitude, latitude, conn):
-    cur = conn.cursor()
+def db_insert_stop_route(id, table, longitude, latitude, cur):
     try:
         cur.execute("INSERT INTO {0} (id, longitude, latitude) VALUES ('{1}', '{2}', '{3}');".format(table, id[0], longitude, latitude))
     except (Exception, psycopg2.DatabaseError) as err:
-        print('Failed to write stop to database!')
+        print('Failed to write' + table + 'to database!')
         print(err)
 
 
-def poppulate_files(conn):
+def poppulate_files(cur):
     print('Reading files...')
     for filename in os.listdir(JSON_DIRECTORY):
         if filename.endswith('.json'):
-            geojson = parse_file(filename, conn)
-            # db_insert(filename, geojson)
+            geojson = parse_file(filename, cur)
 
+
+def reset_tables(cur):
+    cur.execute("TRUNCATE TABLE buses RESTART IDENTITY CASCADE;")
+    
 if __name__ == "__main__":
     conn = db_connect()
-    poppulate_files(conn)
+    cur = conn.cursor()
+    reset_tables(cur)
+    poppulate_files(cur)
+    conn.commit()
