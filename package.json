@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/KevinMech/orlando-shuttle-api/issues"
   },
-  "homepage": "https://github.com/KevinMech/orlando-shuttle-api#readme"
+  "homepage": "https://github.com/KevinMech/orlando-shuttle-api#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
