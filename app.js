@@ -1,7 +1,10 @@
 const express = require('express');
+const db = require('./lib/db.js');
 
 const app = express();
 const port = 8080;
+
+db.testConnection();
 
 app.get('/', (req, res) => {
     res.send('<h3>Welcome!</h3>'

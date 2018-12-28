@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/KevinMech/orlando-shuttle-api#readme",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "pg-promise": "^8.5.4"
   },
   "devDependencies": {
     "eslint": "^5.11.1",
