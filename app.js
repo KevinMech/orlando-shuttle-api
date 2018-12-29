@@ -3,7 +3,7 @@ const db = require('./lib/db.js');
 const buses = require('./routes/buses.js');
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 db.testConnection();
 
