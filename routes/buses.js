@@ -56,6 +56,7 @@ router.get('/shuttle/:name', async (req, res) => {
             return;
         }
     }
+    res.status(404).send("404 resource not found");
 });
 
 module.exports = router;
