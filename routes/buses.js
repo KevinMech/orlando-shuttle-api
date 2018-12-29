@@ -20,7 +20,7 @@ router.use(async (req, res, next) => {
     next();
 });
 
-router.get('/', async (req, res) => {
+router.get('/shuttle', async (req, res) => {
     let stops;
     let routes;
     let promises = [];
@@ -29,14 +29,33 @@ router.get('/', async (req, res) => {
         try {
             stops = await db.getStops(shuttle.id);
             routes = await db.getRoutes(shuttle.id);
-            let shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
-            shuttles.push(shuttleJSON);
         } catch (err) {
             console.log(`Error: Failed to fetch JSON for shuttle ${shuttle.name}`);
             console.log(err);
         }
+        let shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
+        shuttles.push(shuttleJSON);
     }
     res.send(shuttles);
+});
+
+router.get('/shuttle/:name', async (req, res) => {
+    let stops;
+    let routes;
+    for (const shuttle of availableshuttles) {
+        if (req.params.name.toLowerCase().trim() === shuttle.name.toLowerCase().trim()) {
+            try {
+                stops = await db.getStops(shuttle.id);
+                routes = await db.getRoutes(shuttle.id);
+            } catch (err) {
+                console.log(`Error: Failed to fetch JSON for shuttle ${shuttle.name}`);
+                console.log(err);
+            }
+            const shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
+            res.send(shuttleJSON);
+            return;
+        }
+    }
 });
 
 module.exports = router;
