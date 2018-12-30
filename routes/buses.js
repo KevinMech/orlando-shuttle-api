@@ -34,6 +34,7 @@ router.get('/shuttle', async (req, res) => {
             console.log(err);
         }
         let shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
+        console.log(`Sent JSON successfully to ${req.ip}!`);
         shuttles.push(shuttleJSON);
     }
     res.send(shuttles);
@@ -52,10 +53,13 @@ router.get('/shuttle/name/:name', async (req, res) => {
                 console.log(err);
             }
             const shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
+            console.log(`Sent JSON successfully to ${req.ip}!`);
             res.send(shuttleJSON);
             return;
         }
     }
+    console.log('');
+    console.log(`[404] Could not find ${req.params.id} for ${req.ip}`);
     res.status(404).send('404 resource not found');
 });
 
@@ -74,12 +78,15 @@ router.get('/shuttle/id/:id', async (req, res) => {
                     console.log(err);
                 }
                 const shuttleJSON = new Shuttle(shuttle.id, shuttle.name, stops, routes);
+                console.log(`Sent JSON successfully to ${req.ip}!`);
                 res.send(shuttleJSON);
                 return;
             }
         }
+        console.log(`[404] Could not find ${req.params.id} for ${req.ip}`);
         res.status(404).send('404 resource not found');
     } else {
+        console.log(`[400] Bad request for ${req.params.id} from ${req.ip}`);
         res.status(400).send('400 bad request');
     }
 });

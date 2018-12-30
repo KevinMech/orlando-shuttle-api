@@ -7,6 +7,12 @@ const port = process.env.PORT || 8080;
 
 db.testConnection();
 
+app.use((req, res, next) => {
+    const date = new Date();
+    console.log(`[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] ${req.method} request recieved for ${req.path} from ${req.ip}...`);
+    next();
+});
+
 app.use('/api', buses);
 
 app.get('/', (req, res) => {
@@ -15,5 +21,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Successfully connected to port ${port}`);
+    console.log(`Now listening on port ${port}...`);
 });
