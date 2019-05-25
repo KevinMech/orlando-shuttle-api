@@ -10,6 +10,9 @@ db.testConnection();
 app.use((req, res, next) => {
     const date = new Date();
     console.log(`[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}] ${req.method} request recieved for ${req.path} from ${req.ip}...`);
+    // Allow for CORS support
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
