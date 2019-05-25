@@ -22,22 +22,22 @@ https://orlando-shuttle-api.herokuapp.com/api/shuttle/
 send a GET request to
 
 ```
-http://localhost:8080/api/shuttle/name/(name here)
+https://orlando-shuttle-api.herokuapp.com/api/shuttle/name/(name here)
 ```
 
 *example:*
 ```
-http://localhost:8080/api/shuttle/name/route13
+https://orlando-shuttle-api.herokuapp.com/api/shuttle/name/route13
 ```
 
 ### GET shuttle by id
 send a GET request to
 
 ```
-http://localhost:8080/api/shuttle/id/(id here)
+https://orlando-shuttle-api.herokuapp.com/api/shuttle/id/(id here)
 ```
 
 *example:*
 ```
-http://localhost:8080/api/shuttle/id/1
+https://orlando-shuttle-api.herokuapp.com/api/shuttle/id/1
 ```
