@@ -100,8 +100,8 @@ def parse_features(geojson, id):
 
     for features in geojson:
         if features['geometry']['type'] == 'Point':
-                coord1 = features['geometry']['coordinates'][0]
-                coord2 = features['geometry']['coordinates'][1]
+                coord1 = features['geometry']['coordinates'][1]
+                coord2 = features['geometry']['coordinates'][0]
                 db_insert_stop_route(id, 'stops', coord1, coord2, cur)
         if features['geometry']['type'] == 'MultiPoint':
             for coords in features['geometry']['coordinates']:
